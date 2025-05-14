@@ -1,79 +1,31 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/* src/style.css */
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+/* 1. 导入 Tailwind CSS (这是 v4 的标准方式) */
+@import "tailwindcss";
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* 2. 测试基础 HTML 元素的样式 (不使用 @layer base 暂时简化测试) */
+html {
+  @apply bg-slate-100 text-slate-800; /* 设置页面背景为浅灰色，文字为深灰色 */
+  font-family: sans-serif; /* 设置一个基础字体 */
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* 3. 测试全局组件类 (不使用 @layer components 暂时简化测试) */
+.global-btn {
+  @apply bg-red-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow-sm transition-transform duration-150 ease-in-out transform hover:scale-105;
+  /* 绿色背景，白色文字，圆角，阴影，鼠标悬浮时轻微放大 */
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-.card {
-  padding: 2em;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+/* --- 您原来的 @layer 定义可以暂时注释掉，以便隔离问题 --- */
+/*
+@layer base {
+  html {
+    @apply text-gray-900;
   }
 }
+
+@layer components {
+  .btn { // 注意：我上面的例子用的是 .global-btn，以避免与您可能在其他地方定义的 .btn 冲突
+    @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600;
+  }
+}
+*/

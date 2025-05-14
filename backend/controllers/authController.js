@@ -20,6 +20,10 @@ exports.signup = async (req, res) => {
       return res.status(400).json({ message: 'Username or email already exists' });
     }
 
+    if (!password || password.length < 6) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters long' });
+    }    
+
     // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -34,7 +38,7 @@ exports.signup = async (req, res) => {
 
     // Generate JWT
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '1h' // 默认 1 小时
+      expiresIn: '1h' 
     });
 
     res.status(201).json({ token, user: { id: user._id, username, email } });
@@ -99,6 +103,44 @@ exports.forgotPassword = async (req, res) => {
 
     res.json({ message: 'Password reset link sent (check console)' });
   } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  const { token, password, confirmPassword } = req.body;
+
+  if (!token || !password || !confirmPassword) {
+    return res.status(400).json({ message: 'Token, password, and confirmPassword are required' });
+  }
+  if (password !== confirmPassword) {
+    return res.status(400).json({ message: 'Passwords do not match' });
+  }
+  if (password.length < 6) {
+    return res.status(400).json({ message: 'Password must be at least 6 characters long' });
+  }
+
+  try {
+    // Verfiy token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Update password
+    user.password = hashedPassword;
+    await user.save();
+
+    res.json({ message: 'Password reset successfully' });
+  } catch (err) {
+    if (err.name === 'TokenExpiredError') {
+      return res.status(400).json({ message: 'Reset token has expired' });
+    }
     res.status(500).json({ message: err.message });
   }
 };
