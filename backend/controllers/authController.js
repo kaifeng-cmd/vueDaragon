@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const User = require('../models/user');
 
 exports.signup = async (req, res) => {
@@ -93,15 +94,31 @@ exports.forgotPassword = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Generate reset token（实际需存储到数据库并设置过期时间）
     const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: '15m'
     });
 
-    // TODO: Send reset email（need Nodemailer）
-    console.log(`Reset link: /reset-password?token=${resetToken}`);
+    // Config Nodemailer
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
 
-    res.json({ message: 'Password reset link sent (check console)' });
+    const resetUrl = `http://localhost:5173/reset-password?token=${resetToken}`;
+    await transporter.sendMail({
+      to: email,
+      subject: 'Password Reset Request',
+      html: `
+        <p>You requested a password reset for your account.</p>
+        <p>Click <a href="${resetUrl}">here</a> to reset your password.</p>
+        <p>This link will expire in 15 minutes.</p>
+      `
+    });
+
+    res.json({ message: 'Password reset email sent' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

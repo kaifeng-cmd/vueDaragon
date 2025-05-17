@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen bg-gray-100">
-      <nav class="bg-blue-600 text-white p-4">
+      <nav class="bg-blue-800 text-white p-4">
         <div class="container mx-auto flex justify-between">
           <router-link to="/" class="font-bold">MyApp</router-link>
           <div>

@@ -8,9 +8,9 @@ const app = express();
 
 // Start CORS
 app.use(cors({
-    origin: 'http://localhost:5173', // 允许的前端源
-    methods: ['GET', 'POST'], // 允许的 HTTP 方法
-    credentials: true // 如果需要发送 cookies 或认证头
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST'], 
+    credentials: true // If need send cookies/head of verification
   }));
 
 // Connect db

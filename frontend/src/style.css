@@ -5,7 +5,7 @@
 
 /* 2. 测试基础 HTML 元素的样式 (不使用 @layer base 暂时简化测试) */
 html {
-  @apply bg-slate-100 text-slate-800; /* 设置页面背景为浅灰色，文字为深灰色 */
+  @apply bg-gray-100 text-slate-800; /* 设置页面背景为浅灰色，文字为深灰色 */
   font-family: sans-serif; /* 设置一个基础字体 */
 }
 
