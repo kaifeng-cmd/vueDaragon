@@ -1,7 +1,15 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <Nav v-if="showNav" />
-    <router-view />
+    <div
+      :class="[
+        'transition-transform duration-300 ease-in-out',
+        isSidebarOpen ? 'translate-x-64' : 'translate-x-0'
+      ]"
+    >
+      <Nav v-if="showNav" @toggleSidebar="toggleSidebar" />
+      <router-view />
+    </div>
+    <Sidebar :isOpen="isSidebarOpen" @toggle="toggleSidebar" />
   </div>
 </template>
 
@@ -12,14 +20,21 @@ defineOptions({
 })
 
 // Input components
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import Nav from './components/Nav.vue';
+import Sidebar from './components/Sidebar.vue';
 
 const route = useRoute();
 const showNav = computed(() =>
   ['/lobby'].includes(route.path)
 );
+const isSidebarOpen = ref(false);
+
+const toggleSidebar = () => {
+  isSidebarOpen.value = !isSidebarOpen.value;
+  console.log('App: Sidebar is now', isSidebarOpen.value ? 'open' : 'closed');
+};
 </script>
 
 <style>

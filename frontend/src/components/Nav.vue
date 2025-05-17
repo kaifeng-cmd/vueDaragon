@@ -3,6 +3,14 @@
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
           <div class="flex items-center">
+            <button
+              type="button"
+              class="mr-4 rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+              @click="toggleSidebar"
+            >
+              <span class="sr-only">Open sidebar</span>
+              <MenuIcon class="h-6 w-6" aria-hidden="true" />
+            </button>
             <div class="shrink-0">
               <img class="size-8" src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="MyApp" />
             </div>
@@ -140,7 +148,7 @@
               enter-to="opacity-100 translate-y-0 sm:scale-100"
               leave="ease-in duration-200"
               leave-from="opacity-100 translate-y-0 sm:scale-100"
-              leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <DialogPanel class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
                 <div>
@@ -183,14 +191,16 @@
   import { ref, watch } from 'vue';
   import { useRouter } from 'vue-router';
   import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems, Dialog, DialogPanel, DialogTitle, TransitionRoot, TransitionChild } from '@headlessui/vue';
-  import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
+  import { Menu as MenuIcon, X as XMarkIcon } from 'lucide-vue-next';
+  import { BellIcon, Bars3Icon } from '@heroicons/vue/24/outline';
   
+  const emit = defineEmits(['toggleSidebar']);
   const router = useRouter();
   const userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {};
   const user = ref({
     name: userData.username || 'Guest',
     email: userData.email || 'guest@example.com',
-    imageUrl: 'vite.svg',
+    imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
   });
   const navigation = [
     { name: 'Dashboard', href: '/lobby', current: true },
@@ -224,5 +234,10 @@
   
   const signOut = () => {
     showLogoutModal.value = true;
+  };
+  
+  const toggleSidebar = () => {
+    console.log('Nav: Emitting toggleSidebar');
+    emit('toggleSidebar');
   };
   </script>
