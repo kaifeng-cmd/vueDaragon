@@ -3,9 +3,6 @@
       <header class="absolute inset-x-0 top-0 z-50">
         <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div class="mt-10 flex items-center justify-center gap-x-6">
-            <n-button class="bg-purple-600">Naive UI Button</n-button>
-
-            <a href="#" class="text-sm/6 font-semibold text-gray-900">Learn more <span aria-hidden="true">→</span></a>
           </div>
           <div class="flex lg:flex-1">
             <router-link to="/" class="-m-1.5 p-1.5">

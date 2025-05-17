@@ -1,6 +1,10 @@
 <template>
-  <router-view />
+  <div class="min-h-screen bg-gray-100">
+    <Nav v-if="showNav" />
+    <router-view />
+  </div>
 </template>
+
 
 <script setup>
 defineOptions({
@@ -8,8 +12,14 @@ defineOptions({
 })
 
 // Input components
-import Home from './views/Home.vue';
-import DefaultLayout from './layouts/DefaultLayout.vue';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import Nav from './components/Nav.vue';
+
+const route = useRoute();
+const showNav = computed(() =>
+  ['/lobby'].includes(route.path)
+);
 </script>
 
 <style>
