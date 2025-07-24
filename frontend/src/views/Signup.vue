@@ -1,6 +1,9 @@
 <template>
-    <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
-      <h2 class="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+  <div class="gradient-bg">
+  <div class="container">
+    <div class="image-section"></div>
+    <div class="form-section">
+      <h2>User Sign Up</h2>
       <form @submit.prevent="signup">
         <InputField
           id="signup-username"
@@ -33,55 +36,154 @@
           placeholder="Confirm your password"
           required
         />
-        <button
-          type="submit"
-          class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700"
-        >
-          Sign Up
-        </button>
+        <button type="submit">Sign Up</button>
       </form>
-      <p class="mt-4 text-center">
-        Already have an account?
-        <router-link to="/login" class="text-blue-600 hover:underline"
-          >Login</router-link
-        >
+      <p class="toggle">
+        Already have an account? <router-link to="/login" class="link">Login</router-link>
       </p>
-      <p v-if="error" class="mt-4 text-red-500 text-center">{{ error }}</p>
+      <p v-if="error" class="error">{{ error }}</p>
     </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
-  import InputField from '../components/InputField.vue';
-  
-  export default {
-    name: 'Signup',
-    components: { InputField },
-    data() {
-      return {
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        error: '',
-      };
+  </div>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+import InputField from '../components/InputField.vue';
+
+export default {
+  name: 'Signup',
+  components: { InputField },
+  data() {
+    return {
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      error: '',
+    };
+  },
+  methods: {
+    async signup() {
+      try {
+        const response = await axios.post('http://localhost:5000/api/auth/signup', {
+          username: this.username,
+          email: this.email,
+          password: this.password,
+          confirmPassword: this.confirmPassword,
+        });
+        localStorage.setItem('token', response.data.token);
+        this.error = '';
+        this.$router.push('/dashboard');
+      } catch (err) {
+        this.error = err.response?.data?.message || 'Signup failed';
+      }
     },
-    methods: {
-      async signup() {
-        try {
-          const response = await axios.post('http://localhost:5000/api/auth/signup', {
-            username: this.username,
-            email: this.email,
-            password: this.password,
-            confirmPassword: this.confirmPassword,
-          });
-          localStorage.setItem('token', response.data.token);
-          this.error = '';
-          this.$router.push('/dashboard');
-        } catch (err) {
-          this.error = err.response?.data?.message || 'Signup failed';
-        }
-      },
-    },
-  };
-  </script>
+  },
+};
+</script>
+
+<style scoped>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+.gradient-bg {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #fff3b0, #deecdd, #deecdd);
+  padding: 20px;
+}
+
+.container {
+  display: flex;
+  width: 800px;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.3);
+}
+
+.image-section {
+  flex: 1;
+  background: url('../assets/summer.jpeg') center/cover no-repeat;
+}
+
+.form-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.form-section h2 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.form-section input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 25px;
+  background: #f0f0f0;
+  box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.1), inset -5px -5px 10px rgba(255, 255, 255, 0.5);
+  font-size: 1em;
+  outline: none;
+}
+
+.form-section button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #ff6666, #ff9999);
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.5);
+  transition: transform 0.2s;
+}
+
+.form-section button:hover {
+  transform: scale(1.05);
+}
+
+.form-section .toggle {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.form-section .link {
+  color: #ff6666;
+  text-decoration: none;
+}
+
+.form-section .link:hover {
+  text-decoration: underline;
+}
+
+.form-section .error {
+  margin-top: 10px;
+  color: #ff4444;
+  text-align: center;
+  font-size: 0.9em;
+}
+</style>
