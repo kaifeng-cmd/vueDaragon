@@ -7,7 +7,7 @@
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
       :placeholder="placeholder"
-      class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+      class="mt-1 mb-3 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
       :required="required"
     />
   </div>

@@ -131,8 +131,9 @@ export default {
 
 .form-section h2 {
   font-size: 1.5em;
-  margin-bottom: 20px;
-  color: #333;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #495579;
   text-align: center;
 }
 
@@ -168,16 +169,19 @@ export default {
 }
 
 .form-section button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 20px;
+  width: 50%;
+  padding: 10px;
+  display: block; 
+  margin: 0 auto;
+  margin-top: 40px;
   border: none;
-  border-radius: 25px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #ff6666, #ff9999);
   color: white;
   font-size: 1em;
+  font-weight: bold;
   cursor: pointer;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.5);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.2);
   transition: transform 0.2s;
 }
 
