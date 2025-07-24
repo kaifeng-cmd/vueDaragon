@@ -1,8 +1,9 @@
-require('dotenv').config();
-const express = require('express');
-const connectDB = require('./config/db');
-const cors = require('cors');
-const rateLimit = require('express-rate-limit');
+import 'dotenv/config.js';
+import express from 'express';
+import connectDB from './config/db.js';
+import cors from 'cors';
+import rateLimit from 'express-rate-limit';
+import authRoutes from './routes/auth.js';
 
 const app = express();
 
@@ -20,7 +21,7 @@ connectDB();
 app.use(express.json());
 
 // Routes
-app.use('/api/auth', require('./routes/auth'));
+app.use('/api/auth', authRoutes);
 app.use('/api/auth', rateLimit({ windowMs: 10 * 60 * 1000, max: 100 }));
 
-module.exports = app;
+export default app;

@@ -1,9 +1,9 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
-const User = require('../models/user');
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
+import User from '../models/user.js';
 
-exports.signup = async (req, res) => {
+export const signup = async (req, res) => {
   const { username, email, password, confirmPassword } = req.body;
 
   // Input verification
@@ -48,7 +48,7 @@ exports.signup = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   const { email, password, rememberMe } = req.body;
 
   // Verify input
@@ -81,7 +81,7 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.forgotPassword = async (req, res) => {
+export const forgotPassword = async (req, res) => {
   const { email } = req.body;
 
   if (!email) {
@@ -124,7 +124,7 @@ exports.forgotPassword = async (req, res) => {
   }
 };
 
-exports.resetPassword = async (req, res) => {
+export const resetPassword = async (req, res) => {
   const { token, password, confirmPassword } = req.body;
 
   if (!token || !password || !confirmPassword) {
