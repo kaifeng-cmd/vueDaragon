@@ -54,7 +54,7 @@ export default {
 }
 .carousel-img {
   width: 100%;
-  height: 250px; /* You can adjust this height */
+  height: 230px; /* You can adjust this height */
   object-fit: cover;
   border-radius: 12px; /* Rounded corners for the images */
 }

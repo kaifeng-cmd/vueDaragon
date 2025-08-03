@@ -104,8 +104,8 @@ export default {
   .main-content {
     /* Four-column layout */
     /* col1: placeholder | col2: feed | col3: trends | col4: placeholder */
-    grid-template-columns: 1fr 2.5fr 1fr 1fr;
-    gap: 32px;
+    grid-template-columns: 1fr 3.5fr 1.5fr 1fr;
+    gap: 24px;
   }
   
   .left-placeholder {
