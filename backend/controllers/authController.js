@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
-import User from '../models/user.js';
+import User from '../models/User.js';
 
 export const signup = async (req, res) => {
   const { username, email, password, confirmPassword } = req.body;
@@ -60,13 +60,13 @@ export const login = async (req, res) => {
     // Search for user
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid email or password' });
+      return res.status(400).json({ message: 'Invalid email' });
     }
 
     // Verify password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid email or password' });
+      return res.status(400).json({ message: 'Invalid password' });
     }
 
     // Generate JWT（according to rememberMe）
