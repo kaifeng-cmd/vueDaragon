@@ -1,7 +1,7 @@
 import os
 import zipfile
 import pandas as pd
-from pymongo import MongoClient
+from pymongo import MongoClient, UpdateOne
 from dotenv import load_dotenv
 import kaggle
 
@@ -35,13 +35,23 @@ def import_to_mongodb(csv_path, collection):
 
     print(f"Importing {len(data)} records to MongoDB collection '{collection.name}'...")
     
-    # Clear existing data in the collection to avoid duplicates on re-runs
-    collection.delete_many({})
-    
-    # Insert new data
-    collection.insert_many(data)
-    
-    print("Data imported successfully!")
+    # Bulk upsert new data based on drama_key
+    operations = []
+    for doc in data:
+        drama_key = doc['drama_key']
+        operations.append(
+            UpdateOne(
+                {'drama_key': drama_key},
+                {'$set': doc},
+                upsert=True
+            )
+        )
+    if operations:
+        result = collection.bulk_write(operations)
+        print(f"Bulk upsert completed. Matched: {result.matched_count}, Inserted: {len(result.upserted_ids) if hasattr(result, 'upserted_ids') else 0}, Modified: {result.modified_count}")
+    else:
+        print("No operations to perform.")
+    print("Data upserted successfully!")
 
 def main():
     """Main function to run the data import process."""
