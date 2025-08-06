@@ -5,6 +5,7 @@ import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import authRoutes from './routes/auth.js';
 import postRoutes from './routes/posts.js';
+import friendshipRoutes from './routes/friendship.js';
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/friends', friendshipRoutes);
 app.use('/api/auth', rateLimit({ windowMs: 10 * 60 * 1000, max: 100 }));
 
 export default app;
