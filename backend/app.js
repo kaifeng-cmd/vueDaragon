@@ -6,6 +6,7 @@ import rateLimit from 'express-rate-limit';
 import authRoutes from './routes/auth.js';
 import postRoutes from './routes/posts.js';
 import friendshipRoutes from './routes/friendship.js';
+import watchedHistoryRoutes from './routes/watchedHistory.js';
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/friends', friendshipRoutes);
+app.use('/api/history', watchedHistoryRoutes);
 app.use('/api/auth', rateLimit({ windowMs: 10 * 60 * 1000, max: 100 }));
 
 export default app;
