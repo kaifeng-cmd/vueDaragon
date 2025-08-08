@@ -11,3 +11,7 @@ __pycache__/
 *.csv 
 
 *.pkl
+
+# Hold On
+test_api.py
+README.md
