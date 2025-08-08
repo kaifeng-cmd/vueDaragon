@@ -9,3 +9,5 @@ __pycache__/
 # Downloaded dataset files
 *.zip
 *.csv 
+
+*.pkl
