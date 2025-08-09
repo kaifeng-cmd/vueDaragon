@@ -50,70 +50,80 @@ class RecommendationService:
             "recommendations": recommendations
         }
     
-    def get_user_recommendations(self, watch_history: List[Dict[str, Any]], page: int = 1, items_per_page: int = 10) -> Dict[str, Any]:
-        """Get drama recommendations based on user's watch history using mean pooling"""
-        if not watch_history:
-            raise HTTPException(status_code=400, detail="Watch history cannot be empty")
-        
-        # Extract drama names and ratings
-        drama_ratings = {}
-        for item in watch_history:
-            drama_name = item.get('dramaName')
-            rating = item.get('rating', 0)
-            if drama_name and drama_name in self.drama_names:
-                drama_ratings[drama_name] = rating
-        
-        if not drama_ratings:
-            raise HTTPException(status_code=400, detail="No valid dramas found in watch history")
-        
-        # Calculate weighted mean pooling
-        drama_names = list(drama_ratings.keys())
-        ratings = list(drama_ratings.values())
-        
+    def get_user_recommendations(self, drama_names: List[str], page: int = 1) -> Dict[str, Any]:
+        """Get drama recommendations based on user's watched drama names using mean pooling (no ratings)."""
+        items_per_page = 10  # Fixed items per page
+
+        if not drama_names:
+            raise HTTPException(status_code=400, detail="Drama names cannot be empty")
+
+        # Filter drama names to those present in the similarity matrix index
+        valid_dramas = [name for name in drama_names if name in self.drama_names]
+        if not valid_dramas:
+            raise HTTPException(status_code=400, detail="No valid dramas found in input list")
+
+        # Collect vectors for valid dramas as numeric numpy arrays
         similarity_vectors = []
-        for drama_name in drama_names:
+        for drama_name in valid_dramas:
             if drama_name in self.similarity_df.columns:
-                similarity_vectors.append(self.similarity_df[drama_name].values)
-        
+                # Ensure 1-D numeric vector by handling potential duplicate columns
+                series = self.similarity_df[drama_name]
+                if isinstance(series, pd.DataFrame):
+                    series = series.iloc[:, 0]  # Take the first column if duplicates exist
+                
+                col_values = series.to_numpy(dtype=float)
+                # Replace NaNs or infs with zeros
+                col_values = np.nan_to_num(col_values, nan=0.0, posinf=0.0, neginf=0.0)
+                similarity_vectors.append(col_values)
+
         if not similarity_vectors:
-            raise HTTPException(status_code=400, detail="No similarity data found")
-        
-        similarity_vectors = np.array(similarity_vectors)
-        ratings = np.array(ratings)
-        
-        # Weighted mean pooling
-        weighted_mean_vector = np.average(similarity_vectors, axis=0, weights=ratings)
-        mean_vector_norm = np.linalg.norm(weighted_mean_vector)
-        
+            raise HTTPException(status_code=400, detail="No similarity data found for provided dramas")
+
+        # Mean pooling without ratings
+        try:
+            similarity_matrix = np.stack(similarity_vectors, axis=0)  # Shape: (num_watched, num_dramas)
+        except Exception as stack_error:
+            raise HTTPException(status_code=500, detail=f"Failed to stack vectors: {stack_error}")
+
+        mean_vector = np.mean(similarity_matrix, axis=0)
+
+        # Normalize the mean vector
+        mean_vector_norm = np.linalg.norm(mean_vector)
         if mean_vector_norm == 0:
-            raise HTTPException(status_code=400, detail="Cannot compute recommendations")
-        
-        weighted_mean_vector = weighted_mean_vector / mean_vector_norm
-        
-        # Calculate similarities with all dramas
+            raise HTTPException(status_code=400, detail="Cannot compute recommendations from zero vector")
+        mean_vector = mean_vector / mean_vector_norm
+
+        # Compute cosine similarity with all dramas, excluding those already watched
         similarities = {}
-        for i, drama_name in enumerate(self.drama_names):
-            if drama_name not in drama_ratings:  # Exclude watched dramas
-                drama_vector = self.similarity_df[drama_name].values
+        for drama_name in self.drama_names:
+            if drama_name not in valid_dramas:
+                # Ensure 1-D numeric vector by handling potential duplicate columns
+                series = self.similarity_df[drama_name]
+                if isinstance(series, pd.DataFrame):
+                    series = series.iloc[:, 0]  # Take the first column if duplicates exist
+
+                drama_vector = series.to_numpy(dtype=float)
+                drama_vector = np.nan_to_num(drama_vector, nan=0.0, posinf=0.0, neginf=0.0)
                 drama_vector_norm = np.linalg.norm(drama_vector)
+                
                 if drama_vector_norm > 0:
                     drama_vector = drama_vector / drama_vector_norm
-                    similarity = np.dot(weighted_mean_vector, drama_vector)
+                    similarity = np.dot(mean_vector, drama_vector)
                     similarities[drama_name] = similarity
-        
-        # Sort and paginate
+
+        # Sort by similarity and paginate
         sorted_dramas = sorted(similarities.items(), key=lambda x: x[1], reverse=True)
         start_idx = (page - 1) * items_per_page
         end_idx = start_idx + items_per_page
-        
+
         if start_idx >= len(sorted_dramas):
             raise HTTPException(status_code=404, detail=f"Page {page} exceeds available recommendations")
-        
+
         top_drama_names = [drama_name for drama_name, _ in sorted_dramas[start_idx:end_idx]]
         recommendations = self._fetch_drama_details(top_drama_names)
-        
+
         return {
-            "input_dramas": drama_names,
+            "input_dramas": valid_dramas,
             "page": page,
             "items_per_page": items_per_page,
             "total_items": len(sorted_dramas),
@@ -133,4 +143,4 @@ class RecommendationService:
                 recommendations.append(drama)
         return recommendations
 
-recommendation_service = RecommendationService() 
+recommendation_service = RecommendationService()

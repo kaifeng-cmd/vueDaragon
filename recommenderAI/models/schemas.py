@@ -6,21 +6,25 @@ class WatchHistoryItem(BaseModel):
     rating: float = Field(..., ge=0, le=5, description="User rating (0-5)")
 
 class UserRecommendationRequest(BaseModel):
-    watch_history: List[WatchHistoryItem] = Field(..., description="User's watch history with ratings")
+    drama_names: List[str] = Field(..., description="List of drama names the user has watched")
     page: Optional[int] = Field(1, ge=1, description="Page number for pagination")
-    items_per_page: Optional[int] = Field(10, ge=1, le=50, description="Number of items per page")
 
 class DramaRecommendation(BaseModel):
     Name: str
-    Genre: Optional[str] = None
     Year: Optional[int] = None
-    Rating: Optional[float] = None
-    Episodes: Optional[int] = None
-    Duration: Optional[str] = None
-    Synopsis: Optional[str] = None
-    Cast: Optional[str] = None
-    Director: Optional[str] = None
+    Genre: Optional[str] = None
+    main_cast: Optional[str] = Field(None, alias="Main Cast")
+    sinopsis: Optional[str] = Field(None, alias="Sinopsis")
+    Score: Optional[float] = None
+    content_rating: Optional[str] = Field(None, alias="Content Rating")
+    Tags: Optional[str] = None
     Network: Optional[str] = None
+    img_url: Optional[str] = Field(None, alias="img url")
+    Episode: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+        validate_by_name = True
 
 class DramaRecommendationResponse(BaseModel):
     input_drama: str
@@ -46,4 +50,4 @@ class AvailableDramasResponse(BaseModel):
     message: str
 
 class ErrorResponse(BaseModel):
-    detail: str 
+    detail: str

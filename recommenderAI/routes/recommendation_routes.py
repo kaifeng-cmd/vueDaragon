@@ -3,7 +3,6 @@ from typing import List, Dict, Any, Optional
 from services.recommendation_service import recommendation_service
 from config.database import db
 from models.schemas import (
-    WatchHistoryItem, 
     UserRecommendationRequest,
     DramaRecommendationResponse,
     UserRecommendationResponse,
@@ -47,13 +46,10 @@ async def recommend_by_user_history(request: UserRecommendationRequest):
         if not db.client:
             db.connect()
         
-        # Convert Pydantic model to dict for service
-        watch_history = [item.dict() for item in request.watch_history]
-        
+        # Use drama names directly for mean pooling recommendation
         result = recommendation_service.get_user_recommendations(
-            watch_history, 
-            request.page, 
-            request.items_per_page
+            request.drama_names,
+            request.page
         )
         return result
     except HTTPException:
