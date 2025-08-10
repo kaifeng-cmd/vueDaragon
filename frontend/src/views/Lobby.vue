@@ -23,56 +23,44 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import DramaCarousel from '../components/DramaCarousel.vue';
 import CreatePost from '../components/CreatePost.vue';
 import PostCard from '../components/PostCard.vue';
 import TrendsSidebar from '../components/TrendsSidebar.vue';
 import { NConfigProvider, NMessageProvider } from 'naive-ui';
 
+defineOptions({
+  name: 'Lobby'
+});
 
-export default {
-  name: 'Lobby',
-  components: {
-    DramaCarousel,
-    CreatePost,
-    PostCard,
-    TrendsSidebar,
-    NConfigProvider,
-    NMessageProvider
+const posts = ref([
+  {
+    id: 1,
+    author: {
+      name: 'Jane Doe',
+      avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
+    },
+    timestamp: '2 hours ago',
+    content: 'Just finished watching "Queen of Tears"! The chemistry between the leads is just off the charts. What a rollercoaster of emotions! 😭💖 #QueenOfTears',
+    imageUrl: 'https://i.mydramalist.com/X0k82_4f.jpg',
+    likes: 125,
+    comments: 23,
   },
-  data() {
-    return {
-      // Dummy data for posts
-      posts: [
-        {
-          id: 1,
-          author: {
-            name: 'Jane Doe',
-            avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
-          },
-          timestamp: '2 hours ago',
-          content: 'Just finished watching "Queen of Tears"! The chemistry between the leads is just off the charts. What a rollercoaster of emotions! 😭💖 #QueenOfTears',
-          imageUrl: 'https://i.mydramalist.com/X0k82_4f.jpg',
-          likes: 125,
-          comments: 23,
-        },
-        {
-          id: 2,
-          author: {
-            name: 'John Smith',
-            avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026704e',
-          },
-          timestamp: '5 hours ago',
-          content: 'Can we talk about the soundtrack of "Lovely Runner"? Every song is a bop and fits the scenes so perfectly. 🎶 #LovelyRunnerOST',
-          imageUrl: null,
-          likes: 88,
-          comments: 12,
-        },
-      ],
-    };
+  {
+    id: 2,
+    author: {
+      name: 'John Smith',
+      avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026704e',
+    },
+    timestamp: '5 hours ago',
+    content: 'Can we talk about the soundtrack of "Lovely Runner"? Every song is a bop and fits the scenes so perfectly. 🎶 #LovelyRunnerOST',
+    imageUrl: null,
+    likes: 88,
+    comments: 12,
   },
-};
+]);
 </script>
 
 <style scoped>

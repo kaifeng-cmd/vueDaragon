@@ -24,39 +24,35 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import axios from 'axios';
 import InputField from '../components/InputField.vue';
 
-export default {
-  name: 'ForgotPassword',
-  components: { InputField },
-  data() {
-    return {
-      email: '',
-      message: '',
-      error: '',
-      loading: false,
-    };
-  },
-  methods: {
-    async forgotPassword() {
-      this.loading = true;
-      this.message = '';
-      this.error = '';
-      try {
-        const response = await axios.post(
-          'http://localhost:5000/api/auth/forgot-password',
-          { email: this.email }
-        );
-        this.message = response.data.message;
-      } catch (err) {
-        this.error = err.response?.data?.message || 'Failed to send reset link';
-      } finally {
-        this.loading = false;
-      }
-    },
-  },
+defineOptions({
+  name: 'ForgotPassword'
+});
+
+const email = ref('');
+const message = ref('');
+const error = ref('');
+const loading = ref(false);
+
+const forgotPassword = async () => {
+  loading.value = true;
+  message.value = '';
+  error.value = '';
+  try {
+    const response = await axios.post(
+      'http://localhost:5000/api/auth/forgot-password',
+      { email: email.value }
+    );
+    message.value = response.data.message;
+  } catch (err) {
+    error.value = err.response?.data?.message || 'Failed to send reset link';
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 

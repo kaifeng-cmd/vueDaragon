@@ -34,41 +34,28 @@
   </n-card>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import { NCard, NInput, NButton, NAvatar, NIcon } from 'naive-ui';
 import { Image, Film, Smile } from 'lucide-vue-next';
 
-export default {
-  name: 'CreatePost',
-  components: {
-    NCard,
-    NInput,
-    NButton,
-    NAvatar,
-    NIcon,
-  },
-  data() {
-    return {
-      postContent: '',
-      // For Lucide icons
-      Image,
-      Film,
-      Smile,
-    };
-  },
-  methods: {
-    submitPost() {
-      if (!this.postContent.trim()) {
-        // Here you can add a notification from naive-ui if you want
-        console.log('Post content is empty');
-        return;
-      }
-      console.log('Posting content:', this.postContent);
-      // In a real app, you would emit an event to the parent component
-      // this.$emit('new-post', this.postContent);
-      this.postContent = ''; // Clear input after posting
-    },
-  },
+defineOptions({
+  name: 'CreatePost'
+});
+
+const postContent = ref('');
+
+const submitPost = () => {
+  if (!postContent.value.trim()) {
+    // Here you can add a notification from naive-ui if you want
+    console.log('Post content is empty');
+    return;
+  }
+  console.log('Posting content:', postContent.value);
+  // In a real app, you would emit an event to the parent component
+  // defineEmits(['new-post']);
+  // emit('new-post', postContent.value);
+  postContent.value = ''; // Clear input after posting
 };
 </script>
 
@@ -116,4 +103,4 @@ export default {
 .action-icon:hover {
   color: #ff8fab; /* A pinkish color for hover */
 }
-</style> 
+</style>

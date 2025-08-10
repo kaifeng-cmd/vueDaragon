@@ -38,50 +38,48 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 import InputField from '../components/InputField.vue';
 
-export default {
-  name: 'Login',
-  components: { InputField },
-  data() {
-    return {
-      email: '',
-      password: '',
-      rememberMe: false,
-      error: '',
-      loading: false,
-    };
-  },
-  methods: {
-    async login() {
-      console.log('Login function called'); 
-      this.loading = true;
-      try {
-        console.log('Sending request with:', {
-          email: this.email,
-          password: this.password,
-          rememberMe: this.rememberMe,
-        });
-        const response = await axios.post('http://localhost:5000/api/auth/login', {
-          email: this.email,
-          password: this.password,
-          rememberMe: this.rememberMe,
-        });
-        console.log('Response:', response.data);
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-        this.error = '';
-        this.$router.push('/lobby');
-      } catch (err) {
-        console.error('Error:', err);
-        this.error = err.response?.data?.message || 'Login failed';
-      } finally {
-        this.loading = false;
-      }
-    },
-  },
+defineOptions({
+  name: 'Login'
+});
+
+const email = ref('');
+const password = ref('');
+const rememberMe = ref(false);
+const error = ref('');
+const loading = ref(false);
+const router = useRouter();
+
+const login = async () => {
+  console.log('Login function called');
+  loading.value = true;
+  try {
+    console.log('Sending request with:', {
+      email: email.value,
+      password: password.value,
+      rememberMe: rememberMe.value,
+    });
+    const response = await axios.post('http://localhost:5000/api/auth/login', {
+      email: email.value,
+      password: password.value,
+      rememberMe: rememberMe.value,
+    });
+    console.log('Response:', response.data);
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('user', JSON.stringify(response.data.user));
+    error.value = '';
+    router.push('/lobby');
+  } catch (err) {
+    console.error('Error:', err);
+    error.value = err.response?.data?.message || 'Login failed';
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 

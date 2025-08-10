@@ -19,29 +19,23 @@
   </n-card>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import { NCarousel, NCard } from 'naive-ui';
 
-export default {
-  name: 'DramaCarousel',
-  components: {
-    NCarousel,
-    NCard
-  },
-  data() {
-    return {
-      dramas: [
-        { id: 1, title: 'Queen of Tears', imageUrl: 'https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fwp-content%2Fblogs.dir%2F6%2Ffiles%2F2022%2F12%2F2022-best-kdramas-tv-shows-netflix-1.jpg?q=90&w=1400&cbr=1&fit=max' },
-        { id: 2, title: 'Lovely Runner', imageUrl: 'https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474592bap/thuc-tinh-awaken-787636.jpg' },
-        { id: 3, title: 'Marry My Husband', imageUrl: 'https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474592avZ/ban-chat-cua-lang-man-be-melodramatic-787653.jpg' },
-        { id: 4, title: 'Goblin', imageUrl: 'https://cdn.mos.cms.futurecdn.net/PTndhvg9oPfqr6hXrbiECN-1024-80.png.webp' },
-        { id: 5, title: 'Goblin', imageUrl: 'https://cdn.mos.cms.futurecdn.net/jmu8jp5mmA4XyqXrGHCnwf-1024-80.jpeg.webp' },
-        { id: 6, title: 'Goblin', imageUrl: 'https://cdn.mos.cms.futurecdn.net/KHhefvjUaJZhLb5SucNvS3-1024-80.jpeg.webp' },
-        { id: 7, title: 'Goblin', imageUrl: 'https://cdn.mos.cms.futurecdn.net/s6doi7xQnHzMyC9HA6BEkV-1024-80.jpeg.webp' },
-      ],
-    };
-  },
-};
+defineOptions({
+  name: 'DramaCarousel'
+});
+
+const dramas = ref([
+  { id: 1, title: 'Queen of Tears', imageUrl: 'https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fwp-content%2Fblogs.dir%2F6%2Ffiles%2F2022%2F12%2F2022-best-kdramas-tv-shows-netflix-1.jpg?q=90&w=1400&cbr=1&fit=max' },
+  { id: 2, title: 'Lovely Runner', imageUrl: 'https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474592bap/thuc-tinh-awaken-787636.jpg' },
+  { id: 3, title: 'Marry My Husband', imageUrl: 'https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474592avZ/ban-chat-cua-lang-man-be-melodramatic-787653.jpg' },
+  { id: 4, title: 'Goblin', imageUrl: 'https://cdn.mos.cms.futurecdn.net/PTndhvg9oPfqr6hXrbiECN-1024-80.png.webp' },
+  { id: 5, title: 'Goblin', imageUrl: 'https://cdn.mos.cms.futurecdn.net/jmu8jp5mmA4XyqXrGHCnwf-1024-80.jpeg.webp' },
+  { id: 6, title: 'Goblin', imageUrl: 'https://cdn.mos.cms.futurecdn.net/KHhefvjUaJZhLb5SucNvS3-1024-80.jpeg.webp' },
+  { id: 7, title: 'Goblin', imageUrl: 'https://cdn.mos.cms.futurecdn.net/s6doi7xQnHzMyC9HA6BEkV-1024-80.jpeg.webp' },
+]);
 </script>
 
 <style scoped>
@@ -58,4 +52,4 @@ export default {
   object-fit: cover;
   border-radius: 12px; /* Rounded corners for the images */
 }
-</style> 
+</style>

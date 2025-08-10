@@ -47,39 +47,37 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 import InputField from '../components/InputField.vue';
 
-export default {
-  name: 'Signup',
-  components: { InputField },
-  data() {
-    return {
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      error: '',
-    };
-  },
-  methods: {
-    async signup() {
-      try {
-        const response = await axios.post('http://localhost:5000/api/auth/signup', {
-          username: this.username,
-          email: this.email,
-          password: this.password,
-          confirmPassword: this.confirmPassword,
-        });
-        localStorage.setItem('token', response.data.token);
-        this.error = '';
-        this.$router.push('/dashboard');
-      } catch (err) {
-        this.error = err.response?.data?.message || 'Signup failed';
-      }
-    },
-  },
+defineOptions({
+  name: 'Signup'
+});
+
+const username = ref('');
+const email = ref('');
+const password = ref('');
+const confirmPassword = ref('');
+const error = ref('');
+const router = useRouter();
+
+const signup = async () => {
+  try {
+    const response = await axios.post('http://localhost:5000/api/auth/signup', {
+      username: username.value,
+      email: email.value,
+      password: password.value,
+      confirmPassword: confirmPassword.value,
+    });
+    localStorage.setItem('token', response.data.token);
+    error.value = '';
+    router.push('/dashboard');
+  } catch (err) {
+    error.value = err.response?.data?.message || 'Signup failed';
+  }
 };
 </script>
 

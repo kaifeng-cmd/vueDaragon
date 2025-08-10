@@ -13,32 +13,35 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'InputField',
-  props: {
-    id: {
-      type: String,
-      required: true, // 强制提供唯一 ID
-    },
-    label: String,
-    type: {
-      type: String,
-      default: 'text',
-    },
-    modelValue: String,
-    placeholder: String,
-    required: {
-      type: Boolean,
-      default: false,
-    },
+<script setup>
+import { computed } from 'vue';
+
+defineOptions({
+  name: 'InputField'
+});
+
+const props = defineProps({
+  id: {
+    type: String,
+    required: true, // 强制提供唯一 ID
   },
-  emits: ['update:modelValue'],
-  computed: {
-    uniqueId() {
-      // 确保 ID 唯一，例如添加组件实例的随机后缀
-      return `${this.id}-${Math.random().toString(36).substr(2, 9)}`;
-    },
+  label: String,
+  type: {
+    type: String,
+    default: 'text',
   },
-};
+  modelValue: String,
+  placeholder: String,
+  required: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+defineEmits(['update:modelValue']);
+
+const uniqueId = computed(() => {
+  // 确保 ID 唯一，例如添加组件实例的随机后缀
+  return `${props.id}-${Math.random().toString(36).substr(2, 9)}`;
+});
 </script>

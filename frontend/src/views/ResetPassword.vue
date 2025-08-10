@@ -29,50 +29,49 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 import InputField from '../components/InputField.vue';
 
-export default {
-  name: 'ResetPassword',
-  components: { InputField },
-  data() {
-    return {
-      token: '',
-      password: '',
-      confirmPassword: '',
-      message: '',
-      error: '',
-      loading: false,
-    };
-  },
-  mounted() {
-    const urlParams = new URLSearchParams(window.location.search);
-    this.token = urlParams.get('token');
-  },
-  methods: {
-    async resetPassword() {
-      this.loading = true;
-      this.message = '';
-      this.error = '';
-      try {
-        const response = await axios.post(
-          'http://localhost:5000/api/auth/reset-password',
-          {
-            token: this.token,
-            password: this.password,
-            confirmPassword: this.confirmPassword,
-          }
-        );
-        this.message = response.data.message;
-        setTimeout(() => this.$router.push('/login'), 2000);
-      } catch (err) {
-        this.error = err.response?.data?.message || 'Failed to reset password';
-      } finally {
-        this.loading = false;
+defineOptions({
+  name: 'ResetPassword'
+});
+
+const token = ref('');
+const password = ref('');
+const confirmPassword = ref('');
+const message = ref('');
+const error = ref('');
+const loading = ref(false);
+const router = useRouter();
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search);
+  token.value = urlParams.get('token');
+});
+
+const resetPassword = async () => {
+  loading.value = true;
+  message.value = '';
+  error.value = '';
+  try {
+    const response = await axios.post(
+      'http://localhost:5000/api/auth/reset-password',
+      {
+        token: token.value,
+        password: password.value,
+        confirmPassword: confirmPassword.value,
       }
-    },
-  },
+    );
+    message.value = response.data.message;
+    setTimeout(() => router.push('/login'), 2000);
+  } catch (err) {
+    error.value = err.response?.data?.message || 'Failed to reset password';
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 

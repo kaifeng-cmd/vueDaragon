@@ -35,33 +35,20 @@
   </n-card>
 </template>
 
-<script>
+<script setup>
 import { NCard, NAvatar, NButton, NIcon } from 'naive-ui';
 import { Heart, MessageCircle, Share2 } from 'lucide-vue-next';
 
-export default {
-  name: 'PostCard',
-  components: {
-    NCard,
-    NAvatar,
-    NButton,
-    NIcon,
+defineOptions({
+  name: 'PostCard'
+});
+
+defineProps({
+  post: {
+    type: Object,
+    required: true,
   },
-  props: {
-    post: {
-      type: Object,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      // For Lucide icons
-      Heart,
-      MessageCircle,
-      Share2,
-    };
-  },
-};
+});
 </script>
 
 <style scoped>
@@ -127,4 +114,4 @@ export default {
 .action-button:hover {
   color: #ff8fab;
 }
-</style> 
+</style>

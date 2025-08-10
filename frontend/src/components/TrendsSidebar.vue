@@ -24,32 +24,26 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import { NCard, NAvatar, NButton } from 'naive-ui';
 
-export default {
-  name: 'TrendsSidebar',
-  components: {
-    NCard,
-    NAvatar,
-    NButton,
-  },
-  data() {
-    return {
-      trends: [
-        { topic: '#QueenOfTears', posts: '125k' },
-        { topic: '#LovelyRunner', posts: '98k' },
-        { topic: '#MarryMyHusband', posts: '76k' },
-        { topic: '#Goblin', posts: '55k' },
-      ],
-      usersToFollow: [
-        { name: 'Kim Soo Hyun', handle: 'soohyun_k', avatarUrl: 'https://i.mydramalist.com/RPEz4_5c.jpg' },
-        { name: 'Park Seo Joon', handle: 'bn_sj2013', avatarUrl: 'https://i.mydramalist.com/B7q2B_5c.jpg' },
-        { name: 'IU', handle: 'dlwlrma', avatarUrl: 'https://i.mydramalist.com/DUE36_5c.jpg' },
-      ],
-    };
-  },
-};
+defineOptions({
+  name: 'TrendsSidebar'
+});
+
+const trends = ref([
+  { topic: '#QueenOfTears', posts: '125k' },
+  { topic: '#LovelyRunner', posts: '98k' },
+  { topic: '#MarryMyHusband', posts: '76k' },
+  { topic: '#Goblin', posts: '55k' },
+]);
+
+const usersToFollow = ref([
+  { name: 'Kim Soo Hyun', handle: 'soohyun_k', avatarUrl: 'https://i.mydramalist.com/RPEz4_5c.jpg' },
+  { name: 'Park Seo Joon', handle: 'bn_sj2013', avatarUrl: 'https://i.mydramalist.com/B7q2B_5c.jpg' },
+  { name: 'IU', handle: 'dlwlrma', avatarUrl: 'https://i.mydramalist.com/DUE36_5c.jpg' },
+]);
 </script>
 
 <style scoped>
@@ -108,4 +102,4 @@ export default {
   font-size: 0.85rem;
   color: #777;
 }
-</style> 
+</style>
